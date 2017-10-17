@@ -1,15 +1,38 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Functions computes and caches matrix invention
+## 
 
-## Write a short comment describing this function
+## makeCacheMatrix creates a special vector, which is really a list containing a function to
+## set and get matrix, set and get invention for this matrix
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  
+  i <- NULL
+  
+  setmatr <- function(mat) {
+    x <<- mat
+    i <<- NULL
+  }
+  
+  getmatr <- function () x
+  setinv <- function (inv) i <<- inv
+  getinv <- function() i
+  list(setmatr = setmatr, getmatr = getmatr,
+       setinv = setinv,
+       getinv = getinv)
+  
 }
 
 
-## Write a short comment describing this function
+## cachSolve calculates invention for matrix, or takes it from cache, if it's been calculated
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  i <- x$getinv()
+  if(!is.null(i)) {
+    message("getting cached data")
+    return(i)
+  }
+  data <- x$getmatr()
+  i <- solve(data)
+  x$setinv(i)
+  i
 }
